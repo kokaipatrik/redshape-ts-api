@@ -1,0 +1,30 @@
+version: "3"
+services:
+  app:
+    container_name: redshape_api
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+      - ./.env:/usr/src/app/.env
+    links:
+      - mongo
+  mongo:
+    container_name: mongodb
+    image: mongo:latest
+    volumes:
+      - data:/data/db
+    ports:
+      - 27017:27017
+  mongo-admin:
+    container_name: admin-mongo
+    image: imilindsingh/admin-mongo
+    ports:
+      - 1234:1234
+    links: ['mongo:mongo']
+    environment:
+      - HOST=0.0.0.0
+
+volumes:
+  data:
